@@ -1,0 +1,34 @@
+name: Selenium SauceDemo Tests
+
+# Pemicu: Jalankan workflow setiap kali ada push atau Pull Request ke branch main/master
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Unduh kode dari repository GitHub kamu
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Setup Python di server GitHub
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    # 3. Install dependency (selenium & webdriver-manager)
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 4. Jalankan pengujian unittest secara Headless
+    - name: Run Selenium Tests
+      run: |
+        python -m unittest discover -s test
